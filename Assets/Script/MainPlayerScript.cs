@@ -12,19 +12,29 @@ public class MainPlayerScript : NetworkBehaviour
     public TMP_Text namePrefab;
     private TMP_Text nameLabel;
 
+    private NetworkVariable<int> posX = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
     public override void OnNetworkSpawn()
     {
         GameObject canvas = GameObject.FindWithTag("MainCanvas");
         nameLabel = Instantiate(namePrefab, Vector3.zero,Quaternion.identity) as TMP_Text;
         nameLabel.transform.SetParent(canvas.transform);
+        posX.OnValueChanged += (int previousValue, int newValue) =>
+        {
+            Debug.Log("Owner ID = " + OwnerClientId + " : pos X = " + posX.Value);
+        };
     }
     // Start is called before the first frame update
 
     private void Update()
     {
-        Vector3 nameLabelPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 2.5f, 0));
+        Vector3 nameLabelPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 3.5f, 0));
         nameLabel.text = gameObject.name;
         nameLabel.transform.position = nameLabelPos;
+        if (IsOwner)
+        {
+            posX.Value = (int)System.Math.Ceiling(transform.position.x);
+        }
     }
 
     private void OnDestroy()
