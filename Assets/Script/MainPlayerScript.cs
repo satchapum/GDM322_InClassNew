@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 using TMPro;
 using Unity.Collections;
 
@@ -16,6 +17,25 @@ public class MainPlayerScript : NetworkBehaviour
     private LoginManagerScript loginManagerScript;
 
     private NetworkVariable<int> posX = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    private Button changeStatusButton;
+    [SerializeField] Material materialHead;
+    public NetworkVariable<bool> isRedMat = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    //public NetworkList<Color> colorToChange = new NetworkList<Color>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public List<Color> colorToAdd;
+    public void ChangeMatColor()
+    {
+        if (IsOwner)
+        {
+            isRedMat.Value = !isRedMat.Value;
+            if (isRedMat.Value)
+            {
+            }
+            else
+            {
+            }
+        }
+    }
 
     public struct NetworkString : INetworkSerializable
     {
@@ -45,6 +65,12 @@ public class MainPlayerScript : NetworkBehaviour
     {
         GameObject canvas = GameObject.FindWithTag("MainCanvas");
         nameLabel = Instantiate(namePrefab, Vector3.zero,Quaternion.identity) as TMP_Text;
+        
+        GameObject button = GameObject.FindWithTag("buttonChangeStatus");
+        changeStatusButton = button.GetComponent<Button>();
+        //colorToChange.Add(colorToAdd[0]);
+        //colorToChange.Add(colorToAdd[1]);
+        changeStatusButton.onClick.AddListener(ChangeMatColor);
         nameLabel.transform.SetParent(canvas.transform);
         posX.OnValueChanged += (int previousValue, int newValue) =>
         {
@@ -58,6 +84,7 @@ public class MainPlayerScript : NetworkBehaviour
 
         if (IsOwner)
         {
+            
             loginManagerScript = GameObject.FindAnyObjectByType<LoginManagerScript>();
             if(loginManagerScript != null)
             {

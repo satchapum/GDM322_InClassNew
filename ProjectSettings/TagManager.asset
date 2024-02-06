@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainCanvas
   - PlayerName
+  - buttonChangeStatus
   layers:
   - Default
   - TransparentFX
