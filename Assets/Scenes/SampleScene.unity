@@ -1522,6 +1522,9 @@ MonoBehaviour:
   - {fileID: 1568983648}
   - {fileID: 2042761239}
   - {fileID: 1592800085}
+  materialList:
+  - {fileID: 2100000, guid: abc5a32797ba34f50bd8c932704cd183, type: 2}
+  - {fileID: 2100000, guid: 3be4ce923a897214090e3b987a36ec8e, type: 2}
   roomID: 0
 --- !u!1 &771781667
 GameObject:
@@ -3502,7 +3505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224130951485110974, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00021362305
+      value: 0.00015258789
       objectReference: {fileID: 0}
     - target: {fileID: 224166536479716514, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchorMax.y

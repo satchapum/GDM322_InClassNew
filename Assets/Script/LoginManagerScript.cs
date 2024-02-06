@@ -24,6 +24,8 @@ public class LoginManagerScript : MonoBehaviour
     [Header("SpawnPos")]
     [SerializeField] Transform[] posList;
 
+    [SerializeField] public List<Material> materialList;
+
     public int roomID;
 
     private void Start()

@@ -19,21 +19,16 @@ public class MainPlayerScript : NetworkBehaviour
     private NetworkVariable<int> posX = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     private Button changeStatusButton;
-    [SerializeField] Material materialHead;
+    //private Material materialHead;
     public NetworkVariable<bool> isRedMat = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     //public NetworkList<Color> colorToChange = new NetworkList<Color>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    public List<Color> colorToAdd;
+    //public List<Color> colorToAdd;
+
     public void ChangeMatColor()
     {
         if (IsOwner)
         {
             isRedMat.Value = !isRedMat.Value;
-            if (isRedMat.Value)
-            {
-            }
-            else
-            {
-            }
         }
     }
 
@@ -64,13 +59,11 @@ public class MainPlayerScript : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         GameObject canvas = GameObject.FindWithTag("MainCanvas");
-        nameLabel = Instantiate(namePrefab, Vector3.zero,Quaternion.identity) as TMP_Text;
-        
-        GameObject button = GameObject.FindWithTag("buttonChangeStatus");
-        changeStatusButton = button.GetComponent<Button>();
+        nameLabel = Instantiate(namePrefab, Vector3.zero, Quaternion.identity) as TMP_Text;
+
         //colorToChange.Add(colorToAdd[0]);
         //colorToChange.Add(colorToAdd[1]);
-        changeStatusButton.onClick.AddListener(ChangeMatColor);
+
         nameLabel.transform.SetParent(canvas.transform);
         posX.OnValueChanged += (int previousValue, int newValue) =>
         {
@@ -81,10 +74,15 @@ public class MainPlayerScript : NetworkBehaviour
             playerNameA.Value = new NetworkString() { info = new FixedString32Bytes(name.text) };
             playerNameB.Value = new NetworkString() { info = new FixedString32Bytes(name.text) };
         }*/
+        if (IsOwner)
+        {
+            GameObject button = GameObject.FindWithTag("buttonChangeStatus");
+            changeStatusButton = button.GetComponent<Button>();
+            changeStatusButton.onClick.AddListener(ChangeMatColor);
+        }
 
         if (IsOwner)
         {
-            
             loginManagerScript = GameObject.FindAnyObjectByType<LoginManagerScript>();
             if(loginManagerScript != null)
             {
@@ -106,12 +104,43 @@ public class MainPlayerScript : NetworkBehaviour
             posX.Value = (int)System.Math.Ceiling(transform.position.x);
         }
         UpdatePlayerInfo();
+        UpdatePlayerStatus();
     }
 
     private void UpdatePlayerInfo()
     {
         if (IsOwnedByServer) { nameLabel.text = playerNameA.Value.ToString(); }
         else { nameLabel.text = playerNameB.Value.ToString(); }
+    }
+
+    private void UpdatePlayerStatus()
+    {
+        loginManagerScript = GameObject.FindAnyObjectByType<LoginManagerScript>();
+        if (IsOwnedByServer) 
+        {
+            if (OwnerClientId == 0)
+            {
+                if (isRedMat.Value)
+                {
+                    gameObject.GetComponentInChildren<Renderer>().material = loginManagerScript.materialList[1];
+                }
+                else
+                {
+                    gameObject.GetComponentInChildren<Renderer>().material = loginManagerScript.materialList[0];
+                }
+            }
+        }
+        else 
+        {
+            if (isRedMat.Value)
+            {
+                gameObject.GetComponentInChildren<Renderer>().material = loginManagerScript.materialList[1];
+            }
+            else
+            {
+                gameObject.GetComponentInChildren<Renderer>().material = loginManagerScript.materialList[0];
+            }
+        }
     }
 
     private void OnDestroy()
@@ -122,6 +151,11 @@ public class MainPlayerScript : NetworkBehaviour
 
     void Start()
     {
+        /*if (IsOwner)
+        {
+            colorToChange.Add(colorToAdd[0]);
+            colorToChange.Add(colorToAdd[1]);
+        }*/
         rb = this.GetComponent<Rigidbody>();
     }
     private void FixedUpdate()
