@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using TMPro;
+using Unity.Collections;
 
 public class MainPlayerScript : NetworkBehaviour
 {
@@ -14,6 +15,30 @@ public class MainPlayerScript : NetworkBehaviour
 
     private NetworkVariable<int> posX = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+    public struct NetworkString : INetworkSerializable
+    {
+        public FixedString32Bytes info;
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref info);
+        }
+        public override string ToString()
+        {
+            return info.ToString();
+        }
+        public static implicit operator NetworkString(string v) =>
+            new NetworkString() { info = new FixedString32Bytes(v)};
+    }
+
+    private NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
+        new NetworkString { info = "player" },
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    private NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
+        new NetworkString { info = "player" },
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+
     public override void OnNetworkSpawn()
     {
         GameObject canvas = GameObject.FindWithTag("MainCanvas");
@@ -23,6 +48,11 @@ public class MainPlayerScript : NetworkBehaviour
         {
             Debug.Log("Owner ID = " + OwnerClientId + " : pos X = " + posX.Value);
         };
+        if (IsServer)
+        {
+            playerNameA.Value = new NetworkString() { info = new FixedString32Bytes("Player1") };
+            playerNameB.Value = new NetworkString() { info = new FixedString32Bytes("Player2") };
+        }
     }
     // Start is called before the first frame update
 
@@ -35,6 +65,13 @@ public class MainPlayerScript : NetworkBehaviour
         {
             posX.Value = (int)System.Math.Ceiling(transform.position.x);
         }
+        UpdatePlayerInfo();
+    }
+
+    private void UpdatePlayerInfo()
+    {
+        if (IsOwnedByServer) { nameLabel.text = playerNameA.Value.ToString(); }
+        else { nameLabel.text = playerNameB.Value.ToString(); }
     }
 
     private void OnDestroy()
