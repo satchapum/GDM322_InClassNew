@@ -13,6 +13,8 @@ public class MainPlayerScript : NetworkBehaviour
     public TMP_Text namePrefab;
     private TMP_Text nameLabel;
 
+    private LoginManagerScript loginManagerScript;
+
     private NetworkVariable<int> posX = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     public struct NetworkString : INetworkSerializable
@@ -32,11 +34,11 @@ public class MainPlayerScript : NetworkBehaviour
 
     private NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
         new NetworkString { info = "player" },
-        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     private NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
         new NetworkString { info = "player" },
-        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
 
     public override void OnNetworkSpawn()
@@ -48,10 +50,21 @@ public class MainPlayerScript : NetworkBehaviour
         {
             Debug.Log("Owner ID = " + OwnerClientId + " : pos X = " + posX.Value);
         };
-        if (IsServer)
+        /*if (IsServer)
         {
-            playerNameA.Value = new NetworkString() { info = new FixedString32Bytes("Player1") };
-            playerNameB.Value = new NetworkString() { info = new FixedString32Bytes("Player2") };
+            playerNameA.Value = new NetworkString() { info = new FixedString32Bytes(name.text) };
+            playerNameB.Value = new NetworkString() { info = new FixedString32Bytes(name.text) };
+        }*/
+
+        if (IsOwner)
+        {
+            loginManagerScript = GameObject.FindAnyObjectByType<LoginManagerScript>();
+            if(loginManagerScript != null)
+            {
+                string name = loginManagerScript.userNameInputField.text;
+                if (IsOwnedByServer) { playerNameA.Value = name; }
+                else{ playerNameB.Value = name; }
+            }
         }
     }
     // Start is called before the first frame update
