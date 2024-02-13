@@ -47,11 +47,11 @@ public class MainPlayerScript : NetworkBehaviour
             new NetworkString() { info = new FixedString32Bytes(v)};
     }
 
-    private NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
+    public NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
         new NetworkString { info = "player" },
         NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-    private NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
+    public NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
         new NetworkString { info = "player" },
         NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
@@ -102,9 +102,31 @@ public class MainPlayerScript : NetworkBehaviour
         if (IsOwner)
         {
             posX.Value = (int)System.Math.Ceiling(transform.position.x);
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                TestServerRpc("hello", new ServerRpcParams());
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                ClientRpcSendParams clientRpcSendParams = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1} };
+                ClientRpcParams clientRpcParams = new ClientRpcParams { Send = clientRpcSendParams };
+                TestClientRpc("Hi , this is server", clientRpcParams);
+            }
         }
         UpdatePlayerInfo();
         UpdatePlayerStatus();
+    }
+
+    [ClientRpc]
+    private void TestClientRpc(string msg, ClientRpcParams clientRpcParams)
+    {
+        Debug.Log("testServer rpc from server = " + msg);
+    }
+
+    [ServerRpc]
+    private void TestServerRpc(string msg, ServerRpcParams serverRpcParams)
+    {
+        Debug.Log("testServer rpc from client = " + OwnerClientId);
     }
 
     private void UpdatePlayerInfo()
@@ -177,6 +199,22 @@ public class MainPlayerScript : NetworkBehaviour
             {
                 rb.angularVelocity = Vector3.zero;
             }
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (nameLabel != null) 
+        {
+            nameLabel.enabled = true;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (nameLabel != null)
+        {
+            nameLabel.enabled = false;
         }
     }
 }

@@ -6,6 +6,7 @@ using QFSW.QC;
 using TMPro;
 using System;
 using Unity.Mathematics;
+using Newtonsoft.Json.Bson;
 
 
 public class LoginManagerScript : MonoBehaviour
@@ -20,6 +21,8 @@ public class LoginManagerScript : MonoBehaviour
 
     public GameObject loginPanel;
     public GameObject leaveButton;
+    public GameObject scorePanel;
+    //public GameObject changeStatusButton;
 
     [Header("SpawnPos")]
     [SerializeField] Transform[] posList;
@@ -33,8 +36,25 @@ public class LoginManagerScript : MonoBehaviour
         NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
         NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
-        loginPanel.SetActive(true);
-        leaveButton.SetActive(false);
+        SetUIVisible(false);
+    }
+
+    public void SetUIVisible(bool isUserLogin)
+    {
+        if (isUserLogin)
+        {
+            loginPanel.SetActive(false);
+            leaveButton.SetActive(true);
+            scorePanel.SetActive(true);
+            //changeStatusButton.SetActive(true);
+        }
+        else
+        {
+            loginPanel.SetActive(true);
+            leaveButton.SetActive(false);
+            scorePanel.SetActive(false);
+            //changeStatusButton.SetActive(false);
+        }
     }
 
     private void HandleClientDisconnect(ulong clientId)
@@ -57,8 +77,7 @@ public class LoginManagerScript : MonoBehaviour
             NetworkManager.Singleton.Shutdown();
         }
 
-        loginPanel.SetActive(true);
-        leaveButton.SetActive(false);
+        SetUIVisible(false);
 
     }
     private void HandleClientConnected(ulong clientId)
@@ -66,8 +85,7 @@ public class LoginManagerScript : MonoBehaviour
         Debug.Log("HandleHandleClientConnected = " + clientId);
         if(clientId == NetworkManager.Singleton.LocalClientId)
         {
-            loginPanel.SetActive(false);
-            leaveButton.SetActive(true);
+            SetUIVisible(true);
         }
     }
 
