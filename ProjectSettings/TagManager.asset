@@ -8,6 +8,7 @@ TagManager:
   - PlayerName
   - buttonChangeStatus
   - DeathZone
+  - Bomb
   layers:
   - Default
   - TransparentFX

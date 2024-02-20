@@ -187,6 +187,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ZHS006_Rem_UGC
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8d77b18bfbb11ec488003646f65a5cb9, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -200,6 +204,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d77b18bfbb11ec488003646f65a5cb9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7777923291051074193}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d77b18bfbb11ec488003646f65a5cb9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2022402733882587506}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d77b18bfbb11ec488003646f65a5cb9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 819201910134336827}
@@ -278,6 +285,19 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &2022402733882587506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6906180079448829197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522a66a392af15c4386acc9a700ad368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombPrefab: {fileID: 7284315095976852270, guid: c6b5478e4ed5b0843a007e738b2ec410, type: 3}
 --- !u!114 &819201910134336827
 MonoBehaviour:
   m_ObjectHideFlags: 0

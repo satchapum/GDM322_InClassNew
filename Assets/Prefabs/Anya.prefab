@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Anya
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1f25597c2ef13a54ebde8d5605457e2d, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 4308941281637348006, guid: 1f25597c2ef13a54ebde8d5605457e2d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -210,6 +214,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f25597c2ef13a54ebde8d5605457e2d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7553990791462791513}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f25597c2ef13a54ebde8d5605457e2d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5021712190052629271}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f25597c2ef13a54ebde8d5605457e2d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4896986402452844001}
@@ -326,6 +333,19 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-5021712190052629271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7585213287515809173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522a66a392af15c4386acc9a700ad368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombPrefab: {fileID: 7284315095976852270, guid: c6b5478e4ed5b0843a007e738b2ec410, type: 3}
 --- !u!136 &4896986402452844001
 CapsuleCollider:
   m_ObjectHideFlags: 0

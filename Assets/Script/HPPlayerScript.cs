@@ -58,5 +58,16 @@ public class HPPlayerScript : NetworkBehaviour
             }
             gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
         }
+        if (collision.gameObject.tag == "Bomb")
+        {
+            if (IsOwnedByServer)
+            {
+                hpP1.Value--;
+            }
+            else
+            {
+                hpP2.Value--;
+            }
+        }
     }
 }
