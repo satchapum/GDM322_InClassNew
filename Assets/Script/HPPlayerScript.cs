@@ -40,6 +40,22 @@ public class HPPlayerScript : NetworkBehaviour
     void Update()
     {
         UpdatePlayerNameAndScore();
+
+    }
+
+    public void UpdateScore()
+    {
+        if (hpP1.Value == 0 && IsOwnedByServer)
+        {
+            hpP1.Value = 5;
+            gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
+
+        }
+        else if (hpP2.Value == 0 && IsClient)
+        {
+            hpP2.Value = 5;
+            gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -69,5 +85,18 @@ public class HPPlayerScript : NetworkBehaviour
                 hpP2.Value--;
             }
         }
+        if (collision.gameObject.tag == "Bullet")
+        {
+            if (IsOwnedByServer)
+            {
+                hpP1.Value--;
+            }
+            else
+            {
+                hpP2.Value--;
+            }
+        }
+        UpdateScore();
+
     }
 }

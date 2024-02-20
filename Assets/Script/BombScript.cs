@@ -11,7 +11,6 @@ public class BombScript : NetworkBehaviour
         if (!IsOwner) return;
         if(collision.gameObject.tag == "Player")
         {
-            Debug.Log("rest");
             ulong networkObjId = GetComponent<NetworkObject>().NetworkObjectId;
             SpawnEffect();
             bombSpawner.DestroyServerRpc(networkObjId);

@@ -9,6 +9,7 @@ TagManager:
   - buttonChangeStatus
   - DeathZone
   - Bomb
+  - Bullet
   layers:
   - Default
   - TransparentFX
