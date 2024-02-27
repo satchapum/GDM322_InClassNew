@@ -2,17 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 
 public class BombSpawnerScript : NetworkBehaviour
 {
     public GameObject bombPrefab;
     private List<GameObject> spawnedBomb = new List<GameObject>();
 
+    private OwnerNetworkAnimationScript ownerNetworkAnimationScript;
+
+    private void Start()
+    {
+        ownerNetworkAnimationScript = GetComponent<OwnerNetworkAnimationScript>();
+    }
+
     void Update()
     {
         if (!IsOwner) return;
         if (Input.GetKeyDown(KeyCode.K))
         {
+            ownerNetworkAnimationScript.SetTrigger("Pickup");
             SpawnBombServerRpc();
         }
     }
@@ -20,7 +29,7 @@ public class BombSpawnerScript : NetworkBehaviour
     [ServerRpc]
     void SpawnBombServerRpc()
     {
-        Vector3 spawnPos = transform.position + (transform.forward * -1.5f) + (transform.up * 1.5f);
+        Vector3 spawnPos = transform.position + (transform.forward * 1.5f) + (transform.up * 1.5f);
         Quaternion spawnRot = transform.rotation;
         GameObject bomb = Instantiate(bombPrefab, spawnPos, spawnRot);
         spawnedBomb.Add(bomb);
