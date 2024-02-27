@@ -10,6 +10,7 @@ TagManager:
   - DeathZone
   - Bomb
   - Bullet
+  - Ground
   layers:
   - Default
   - TransparentFX

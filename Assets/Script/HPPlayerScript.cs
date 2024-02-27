@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using TMPro;
+using Unity.Netcode.Components;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class HPPlayerScript : NetworkBehaviour
 {
+    private OwnerNetworkAnimationScript ownerNetworkAnimationScript;
+
     TMP_Text p1Text;
     TMP_Text p2Text;
     MainPlayerScript mainPlayer;
@@ -21,6 +24,7 @@ public class HPPlayerScript : NetworkBehaviour
     {
         p1Text = GameObject.Find("player_1Text").GetComponent<TMP_Text>();
         p2Text = GameObject.Find("player_2Text").GetComponent<TMP_Text>();
+        ownerNetworkAnimationScript = GetComponent<OwnerNetworkAnimationScript>();
         mainPlayer = GetComponent<MainPlayerScript>();
     }
 
@@ -47,12 +51,14 @@ public class HPPlayerScript : NetworkBehaviour
     {
         if (hpP1.Value == 0 && IsOwnedByServer)
         {
+            ownerNetworkAnimationScript.SetTrigger("Die");
             hpP1.Value = 5;
             gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
 
         }
         else if (hpP2.Value == 0 && IsClient)
         {
+            ownerNetworkAnimationScript.SetTrigger("Die");
             hpP2.Value = 5;
             gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
         }

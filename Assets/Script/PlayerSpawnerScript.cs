@@ -10,8 +10,12 @@ public class PlayerSpawnerScript : MonoBehaviour
     // Start is called before the first frame update
     public Behaviour[] scripts;
     private Renderer[] renderers;
+
+    private Animator animator;
+
     void Start()
     {
+        animator = GetComponent<Animator>();
         //mainPlayer = GetComponent<MainPlayerScript>();
         renderers = GetComponentsInChildren<Renderer>();
     }
@@ -47,10 +51,12 @@ public class PlayerSpawnerScript : MonoBehaviour
     }
     IEnumerator RespawnCoroutine(Vector3 spawnPos) 
     {
-        SetPlayerState(false);
-        transform.position = spawnPos;
+        
         yield return new WaitForSeconds(3f) ;
+        transform.position = spawnPos;
+        SetPlayerState(false);
         SetPlayerState(true);
+        animator.Play("Idle", -1, 0.0f);
         /*mainPlayer.enabled = false;
         transform.position = spawnPos;
         mainPlayer.enabled = true;*/
