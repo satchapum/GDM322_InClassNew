@@ -182,7 +182,7 @@ public class MainPlayerScript : NetworkBehaviour
     }
     private void FixedUpdate()
     {
-        if (IsOwner)
+        /*if (IsOwner)
         {
             float translation = Input.GetAxis("Vertical") * speed;
             translation *= Time.deltaTime;
@@ -199,7 +199,7 @@ public class MainPlayerScript : NetworkBehaviour
             {
                 rb.angularVelocity = Vector3.zero;
             }
-        }
+        }*/
     }
 
     private void OnEnable()

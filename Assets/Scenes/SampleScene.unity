@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1699,7 +1699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46b66951768d694198a115e34c0c189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlternativePlayerPrefabs: 7d2dc59db27dbe88
+  AlternativePlayerPrefabs: 7d2dc59db27dbe883cf03bc05f69ec39
   dropdown_TMP: {fileID: 1615024895}
   userNameInputField: {fileID: 1605955181}
   roomIdInputField: {fileID: 1086187674}
@@ -2927,7 +2927,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!4 &1128864653
 Transform:
   m_ObjectHideFlags: 0
@@ -3771,7 +3771,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224130951485110974, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00015258789
+      value: 0.00018310547
       objectReference: {fileID: 0}
     - target: {fileID: 224166536479716514, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4792,6 +4792,10 @@ MonoBehaviour:
       m_Image: {fileID: 21300000, guid: bac306ca89ba1344c9c30aef28f6b987, type: 3}
     - m_Text: skin_Rem
       m_Image: {fileID: 21300000, guid: 6345e06dfd42abc4bb20602b2de44018, type: 3}
+    - m_Text: skin_Ninja
+      m_Image: {fileID: 21300000, guid: c1df40d40cc814a5695dee0e707cc03a, type: 3}
+    - m_Text: skin_Girl
+      m_Image: {fileID: 21300000, guid: 21fb6714fde0b41b9ba9639d03f5a2a6, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

@@ -295,6 +295,14 @@ public class LoginManagerScript : MonoBehaviour
         {
             return 1;
         }
+        if (dropdown_TMP.GetComponent<TMP_Dropdown>().value == 2)
+        {
+            return 2;
+        }
+        if (dropdown_TMP.GetComponent<TMP_Dropdown>().value == 3)
+        {
+            return 3;
+        }
         return 0;
     }
 }
