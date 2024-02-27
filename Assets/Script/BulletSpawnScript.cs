@@ -23,9 +23,10 @@ public class BulletSpawnScript : NetworkBehaviour
         Vector3 spawnPos = transform.position + (transform.forward * 1.5f) + (transform.up * 1.5f);
         Quaternion spawnRot = transform.rotation;
         GameObject bullet = Instantiate(bulletPrefab, spawnPos, spawnRot);
+        bullet.GetComponent<NetworkObject>().Spawn();
         spawnedBullet.Add(bullet);
         bullet.GetComponent<BulletScript>().bulletSpawner = this;
-        bullet.GetComponent<NetworkObject>().Spawn();
+        
     }
 
     [ServerRpc(RequireOwnership = false)]
