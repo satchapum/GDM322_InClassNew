@@ -7,10 +7,16 @@ using TMPro;
 using System;
 using Unity.Mathematics;
 using Newtonsoft.Json.Bson;
+using Unity.Netcode.Transports.UTP;
 
 
 public class LoginManagerScript : MonoBehaviour
 {
+    public string ipAddress = "127.0.0.1";
+    public TMP_InputField joinCodeInputField;
+    public string joinCode;
+    UnityTransport transport;
+
     public List<uint> AlternativePlayerPrefabs;
     public TMP_Dropdown dropdown_TMP;
 
@@ -30,6 +36,13 @@ public class LoginManagerScript : MonoBehaviour
     [SerializeField] public List<Material> materialList;
 
     public int roomID;
+
+    /*private void SetIPAddress()
+    {
+        transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        ipAddress = ipInputField.GetComponent<TMP_InputField>().text;
+        transport.ConnectionData.Address = ipAddress;
+    }*/
 
     private void Start()
     {
@@ -107,8 +120,14 @@ public class LoginManagerScript : MonoBehaviour
         isApproveConnection = !isApproveConnection;
         return isApproveConnection;
     }
-    public void Host()
+    public async void Host()
     {
+        if (RelayManagerScript.Instance.IsRelayEnabled)
+        {
+            await RelayManagerScript.Instance.CreateRelay();
+        }
+        
+        //SetIPAddress();
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         roomID = int.Parse(roomIdInputField.GetComponent<TMP_InputField>().text);
@@ -249,8 +268,15 @@ public class LoginManagerScript : MonoBehaviour
         response.Rotation = spawnRot;
     }
 
-    public void Client()
+    public async void Client()
     {
+        joinCode = joinCodeInputField.GetComponent<TMP_InputField>().text;
+        //SetIPAddress();
+        if (RelayManagerScript.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode))
+        {
+            await RelayManagerScript.Instance.JoinRelay(joinCode);
+        }
+
         string username = userNameInputField.GetComponent<TMP_InputField>().text;
         string characterId = setInputSkinData().ToString();
         string roomID = roomIdInputField.GetComponent<TMP_InputField>().text;
