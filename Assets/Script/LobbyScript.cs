@@ -6,7 +6,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using System.Net.Http.Headers;
 
-public class LobbyScript : MonoBehaviour
+public class LobbyScript : Singleton<LobbyScript>
 {
     Lobby hostLobby;
 
@@ -32,14 +32,18 @@ public class LobbyScript : MonoBehaviour
                 {
                     Data = new Dictionary<string, PlayerDataObject>
                     {
-                        {"playerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)}
+                        {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)}
                     }
+                },
+                Data = new Dictionary<string, DataObject>
+                {
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, "DeathMatch")}
                 }
             };
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             hostLobby = lobby;
             StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
-            Debug.Log("Crete Lobby : " + lobby.Name + "," + lobby.MaxPlayers  + "," + lobby.Id + "," +  lobby.LobbyCode);
+            Debug.Log("Create Lobby : " + lobby.Name + "," + lobby.MaxPlayers  + "," + lobby.Id + "," +  lobby.LobbyCode);
             PrintPlayers(hostLobby);
         }catch(LobbyServiceException e)
         {
@@ -52,8 +56,20 @@ public class LobbyScript : MonoBehaviour
     {
         try
         {
+            JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions
+            {
+                Player = new Player
+                {
+                    Data = new Dictionary<string, PlayerDataObject>
+                    {
+                        {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)}
+                    }
+                }
+            };
+            Lobby joinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
             await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
             Debug.Log("Joined  by lobby code : " + lobbyCode);
+            PrintPlayers(joinedLobby);
         }catch (LobbyServiceException e)
         {
             Debug.Log(e);
@@ -113,7 +129,7 @@ public class LobbyScript : MonoBehaviour
             Debug.Log("Lobbies found : " + lobbies.Results.Count);
             foreach(Lobby lobby in lobbies.Results)
             {
-                Debug.Log(lobby.Name + " , " + lobby.MaxPlayers);
+                Debug.Log(lobby.Name + " , " + lobby.MaxPlayers + " , " + lobby.Data["GameMode"].Value);
             }
         }catch(LobbyServiceException e)
         {
@@ -137,8 +153,9 @@ public class LobbyScript : MonoBehaviour
     }
 
     [Command]
-    private void PrintPlayers(Lobby lobby)
+    public void PrintPlayers(Lobby lobby)
     {
+        Debug.Log("Lobby : " + lobby.Name + " / " + lobby.Data["JoinCodeKey"].Value);
         foreach(Player player in lobby.Players)
         {
             Debug.Log(player.Id + " : " + player.Data["PlayerName"].Value);

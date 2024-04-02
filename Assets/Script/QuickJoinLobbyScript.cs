@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Services.Authentication;
-using ParrelSync;
 using Unity.Services.Core;
 using System.Threading.Tasks;
 using Unity.Services.Lobbies;
@@ -142,7 +141,7 @@ public class QuickJoinLobbyScript : MonoBehaviour
             NetworkManager.Singleton.StartHost();
 
             Debug.Log("Join code = " + joinCode);
-            LobbyManagerScript.Instance.PrintPlayers(lobby);
+            LobbyScript.Instance.PrintPlayers(lobby);
             return lobby;
         }
         catch (Exception e)
