@@ -9,6 +9,14 @@ using System.Net.Http.Headers;
 public class LobbyScript : MonoBehaviour
 {
     Lobby hostLobby;
+
+    string playerName;
+
+    private void Start()
+    {
+        playerName = "Myname" + Random.Range(1, 9999);
+        Debug.Log("Player name = " + playerName);
+    }
     [Command]
     private async void CreateLobby()
     {
@@ -16,14 +24,23 @@ public class LobbyScript : MonoBehaviour
         {
             string lobbyName = "My lobby";
             int maxPlayers = 4;
-            CreateLobbyOptions options = new CreateLobbyOptions();
-            options.IsPrivate = false;
+            CreateLobbyOptions options = new CreateLobbyOptions
+            {
+                IsPrivate = false,
 
+                Player = new Player
+                {
+                    Data = new Dictionary<string, PlayerDataObject>
+                    {
+                        {"playerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)}
+                    }
+                }
+            };
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             hostLobby = lobby;
             StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
             Debug.Log("Crete Lobby : " + lobby.Name + "," + lobby.MaxPlayers  + "," + lobby.Id + "," +  lobby.LobbyCode);
-
+            PrintPlayers(hostLobby);
         }catch(LobbyServiceException e)
         {
             Debug.Log(e);
@@ -119,5 +136,13 @@ public class LobbyScript : MonoBehaviour
         }
     }
 
+    [Command]
+    private void PrintPlayers(Lobby lobby)
+    {
+        foreach(Player player in lobby.Players)
+        {
+            Debug.Log(player.Id + " : " + player.Data["PlayerName"].Value);
+        }
+    }
 
 }
